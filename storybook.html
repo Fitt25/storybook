@@ -1,0 +1,104 @@
+<button class = "previous">Previous</button>
+<button class = "next">Next</button>
+<hr>
+<h2 class = "line"></h2>
+<hr>
+<textarea class = "input" placeholder="Create your own story..."></textarea>
+<button class = "submit">Submit</button>
+<div class = "divContainer">
+</div>
+
+
+<script>
+    const previous = document.querySelector(".previous")
+    const next = document.querySelector(".next")
+    const line = document.querySelector(".line")
+    const input = document.querySelector(".input")
+    const submit = document.querySelector(".submit")
+    const divContainer = document.querySelector(".divContainer")
+    let index = 0
+    const dataStr = localStorage.getItem("storyBook") || '[]'
+    let data = JSON.parse(dataStr)
+    console.log(dataStr)
+    if(!data.length){
+        data = [
+        "🌙 The Clockmaker’s Secret",
+        "In a crooked little town where every street bent like a question mark, there lived a peculiar clockmaker named Elwin.",
+        "He wore a dusty gray coat full of hidden pockets and spoke in ticks and tocks more often than words.",
+        "Elwin’s shop was unlike any other. It had clocks that ran backward, cuckoos that refused to come out, and hourglasses filled with glittering sand that sparkled like stardust.",
+        "Most townsfolk avoided it—except for a curious girl named Lila, who believed magic lived in places everyone else ignored.",
+        "One rainy afternoon, Lila wandered into Elwin’s shop to escape the storm.",
+        "He looked up from a clock shaped like a crescent moon and smiled.",
+        "“You’re late,” he said, though she’d never been there before.",
+        "“Late for what?” Lila asked.",
+        "“For your adventure,” he whispered, and handed her a small silver key. It was warm to the touch.",
+        "He motioned toward a tall grandfather clock in the back.",
+        "“Turn the key and step through before the second hand strikes twelve. Don’t look back, no matter what.”",
+        "With her heart racing like a hummingbird, Lila turned the key.",
+        "The clock groaned and swung open like a door, revealing a spiral staircase glowing with blue light.",
+        "Without hesitation, she stepped in.",
+        "The world behind the clock was unlike anything she had known—floating islands, upside-down rivers, creatures made of mist, and constellations that sang lullabies.",
+        "It was a realm caught between seconds, a place where time paused for those who dared to wander.",
+        "Lila spent what felt like days there—befriending a winged cat, solving riddles from a talking tree, and unlocking a tower that held a forgotten star.",
+        "But just as she placed the star back into the sky, the wind whispered, *Time’s up.*",
+        "She raced back to the staircase as the twelfth chime echoed faintly.",
+        "The door closed behind her with a soft *click.*",
+        "Elwin looked up and nodded. “You made it.”",
+        "“How long was I gone?” Lila asked.",
+        "Elwin smiled. “About a minute.”",
+        "“But it felt like a lifetime!”",
+        "“Sometimes the best adventures happen between seconds,” he said, tucking the silver key back into one of his coat’s many pockets.",
+        "From that day forward, Lila never told anyone about the hidden world behind the clock.",
+        "But every time it rained, she returned to the shop—just in case time paused again. ⏳✨"
+        ];
+    }
+    
+
+    
+    const render = () => {
+        localStorage.setItem("storyBook", JSON.stringify(data))
+        divContainer.innerHTML= data.reduce((acc, e)=>{
+            return acc + `<h5 class = "allSentences">${e}</h5> ` 
+        }, "")
+        const allSentences = document.querySelectorAll(".allSentences")
+        allSentences.forEach((e,i) => {
+            e.onclick = () => {
+                data.splice(i,1)
+                render()
+            }
+        })
+    }
+
+    const displayLine = () => {
+        line.innerText = data[index]
+    }
+    previous.onclick = () => {
+        index-=1
+        if (index < 0){
+            alert("You have reached the beginning of the book!")
+            index = 0
+        }
+        
+        displayLine()
+    }
+    next.onclick = () => {
+        index+=1
+        if (index >= data.length){
+            alert("You have reached the end of the book!")
+            index = data.length-1
+            
+        }
+        
+        displayLine()
+    }
+
+    submit.onclick = () => {
+        let str = input.value
+        data.push(str)
+        render()
+        input.value =""
+    }
+    render()
+    displayLine()
+</script>
+
